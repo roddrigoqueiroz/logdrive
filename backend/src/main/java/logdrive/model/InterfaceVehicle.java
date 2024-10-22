@@ -1,4 +1,4 @@
-package model;
+package logdrive.model;
 
 public interface InterfaceVehicle {
 

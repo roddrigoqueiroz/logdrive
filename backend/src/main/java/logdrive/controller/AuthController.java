@@ -1,4 +1,4 @@
-package controller;
+package logdrive.controller;
 
 import org.springframework.stereotype.Controller;
 

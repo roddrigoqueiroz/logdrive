@@ -1,4 +1,4 @@
-package model;
+package logdrive.model;
 
 import java.util.Date;
 

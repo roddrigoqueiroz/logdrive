@@ -1,6 +1,6 @@
 package logdrive.model;
 
-public enum Gravidade {
+public enum TicketSeverity {
     LEVE,
     MODERADA,
     GRAVE,

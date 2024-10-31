@@ -1,6 +1,6 @@
 package logdrive.model;
 
-public interface Servico {
+public interface ChargedService {
 
     void cobrar(double valor);
 }

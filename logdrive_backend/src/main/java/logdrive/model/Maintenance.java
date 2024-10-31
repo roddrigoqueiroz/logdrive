@@ -1,8 +1,18 @@
 package logdrive.model;
 
+//import jakarta.persistence.Entity;
+//import jakarta.persistence.GeneratedValue;
+//import jakarta.persistence.GenerationType;
+//import jakarta.persistence.Id;
+
 import java.util.Date;
 
-public class Manutencao implements Servico{
+//@Entity
+public class Maintenance implements ChargedService {
+
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     private double oleoKm;
     private double pneuKm;
     private Date dataAbastecimento;

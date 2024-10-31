@@ -3,6 +3,7 @@ package logdrive.service;
 import logdrive.model.Driver;
 //import logdrive.repository.DriverRepository;
 //import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,39 @@ public class DriverService {
         }
         return false;
 //        return driverRepository.findByEmail(email).isPresent();
+    }
+
+    public Driver getDriverByEmail(String email) {
+        for (Driver driver : drivers) {
+            if (driver.getEmail().equals(email)) {
+                return driver;
+            }
+        }
+        return null;
+    }
+
+    public boolean authenticate(String email, String password) {
+
+        // verifica se dados de entrada são válidos (não nulos e não vazios)
+        checkInputData(email);
+        checkInputData(password);
+
+        // busca condutor atraves do email
+        Driver driver = getDriverByEmail(email);
+
+        if (driver == null) {
+            // se nao encontrar lanca excecao
+            throw new IllegalArgumentException("Email não encontrado na base de dados");
+        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(password, driver.getPassword());
+    }
+
+    public void checkInputData(String input) {
+        // Validação de dados de entrada
+        if (input == null || input.isEmpty()) {
+            throw new IllegalArgumentException("Dados inválidos ou vazios");
+        }
     }
 
 }

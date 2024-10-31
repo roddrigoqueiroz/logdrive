@@ -33,4 +33,16 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody Driver loginRequest) {
+        try {
+            if (driverService.authenticate(loginRequest.getEmail(), loginRequest.getPassword())) {
+                return ResponseEntity.ok("Login bem-sucedido");
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erro no login");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao login: " + e.getMessage());
+        }
+    }
+
 }

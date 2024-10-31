@@ -82,4 +82,51 @@ public class AuthControllerTest {
         assertEquals("Erro ao cadastrar usuário: Database error", response.getBody());
     }
 
+    @Test
+    void login_whenDriverIsNotRegistered_shouldReturnErrorMessage() {
+        Driver newDriver = new Driver();
+        newDriver.setEmail("email@example.com");
+        newDriver.setNome("Test User");
+        newDriver.setCpf("123456789");
+        newDriver.setPassword("password");
+        when(driverService.checkIfExists(newDriver.getEmail())).thenReturn(false);
+        ResponseEntity<String> response = driverController.login(newDriver);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void login_whenDriverAlreadyExists_shouldReturnErrorMessage() {
+        Driver newDriver = new Driver();
+        newDriver.setEmail("email@example.com");
+        newDriver.setNome("Test User");
+        newDriver.setCpf("123456789");
+        newDriver.setPassword("password");
+        when(driverService.checkIfExists(newDriver.getEmail())).thenReturn(true);
+        ResponseEntity<String> response = driverController.login(newDriver);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void login_whenExceptionOccurs_shouldReturnErrorMessage() {
+        Driver newDriver = new Driver();
+        newDriver.setEmail("email@example.com");
+        newDriver.setNome("Test User");
+        newDriver.setCpf("123456789");
+        newDriver.setPassword("password");
+        doThrow(new RuntimeException("Database error")).when(driverService).saveDriver(any(Driver.class));
+        ResponseEntity<String> response = driverController.login(newDriver);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void login_successful() {
+        Driver newDriver = new Driver();
+        newDriver.setEmail("email@example.com");
+        newDriver.setNome("Test User");
+        newDriver.setCpf("123456789");
+        newDriver.setPassword("password");
+        when(driverService.checkIfExists(newDriver.getEmail())).thenReturn(true);
+        ResponseEntity<String> response = driverController.login(newDriver);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
 }

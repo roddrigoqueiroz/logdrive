@@ -1,9 +1,9 @@
 package logdrive.service;
 
-import logdrive.model.Driver;
+import logdrive.dto.SignupDTO;
 //import logdrive.repository.DriverRepository;
 //import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import logdrive.model.Driver;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +18,10 @@ public class DriverService {
     List<Driver> drivers;
 
     // salva condutor no banco de dados
-    public void saveDriver(Driver condutor) {
+    public void saveDriver(SignupDTO signupDTO) {
         // salva senha cifrada com Bcrypt
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        condutor.setPassword(encoder.encode(condutor.getPassword()));
-        drivers.add(condutor);
+        Driver driver = new Driver(signupDTO);
+        drivers.add(driver);
 //        driverRepository.save(condutor); // salva condutor no banco de dados via JPA
     }
 
@@ -49,8 +48,8 @@ public class DriverService {
     public boolean authenticate(String email, String password) {
 
         // verifica se dados de entrada são válidos (não nulos e não vazios)
-        checkInputData(email);
-        checkInputData(password);
+//        checkInputData(email);
+//        checkInputData(password);
 
         // busca condutor atraves do email
         Driver driver = getDriverByEmail(email);

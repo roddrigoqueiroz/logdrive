@@ -1,6 +1,8 @@
 package logdrive.controller;
 
-import logdrive.model.Driver;
+import jakarta.validation.Valid;
+import logdrive.dto.SignupDTO;
+import logdrive.dto.LoginDTO;
 import logdrive.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,26 +19,26 @@ public class AuthController {
 
     // atende requisição POST, cadastrando usuário
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody Driver registerRequest) {
+    public ResponseEntity<String> signup(@Valid @RequestBody SignupDTO signupDTO) {
         try {
-            // checa se já há conta registrada com o email recebido
-            if(driverService.checkIfExists(registerRequest.getEmail())) throw new IllegalArgumentException("Usuário já registrado");
-            Driver newCondutor = new Driver();
-            newCondutor.setEmail(registerRequest.getEmail());
-            newCondutor.setNome(registerRequest.getNome());
-            newCondutor.setCpf(registerRequest.getCpf());
-            newCondutor.setPassword(registerRequest.getPassword());
-            driverService.saveDriver(newCondutor); // salva o condutor
+            // Checa se já há conta registrada com o email recebido
+            if (driverService.checkIfExists(signupDTO.email())) {
+                throw new IllegalArgumentException("Usuário já registrado");
+            }
+            // Salva o novo condutor diretamente a partir do DTO recebido
+            driverService.saveDriver(signupDTO);
             return ResponseEntity.ok("Usuário cadastrado com sucesso");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao cadastrar usuário: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Erro ao cadastrar usuário: " + e.getMessage());
         }
     }
 
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Driver loginRequest) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginDTO loginRequest) {
         try {
-            if (driverService.authenticate(loginRequest.getEmail(), loginRequest.getPassword())) {
+            if (driverService.authenticate(loginRequest.email(), loginRequest.password())) {
                 return ResponseEntity.ok("Login bem-sucedido");
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erro no login");

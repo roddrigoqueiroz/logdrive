@@ -30,7 +30,7 @@ public class AuthControllerTest {
         // Mockando o Driver
         Driver newDriver = new Driver();
         newDriver.setEmail("email@example.com");
-        newDriver.setNome("Test User");
+        newDriver.setUsername("Test User");
         newDriver.setCpf("123456789");
         newDriver.setPassword("password");
 
@@ -38,7 +38,7 @@ public class AuthControllerTest {
         when(driverService.checkIfExists(newDriver.getEmail())).thenReturn(false);
 
         // Chamando o método do controlador
-        ResponseEntity<String> response = driverController.register(newDriver);
+        ResponseEntity<String> response = driverController.signup(newDriver);
 
         // Verificações
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -56,7 +56,7 @@ public class AuthControllerTest {
         when(driverService.checkIfExists(existingDriver.getEmail())).thenReturn(true);
 
         // Chamando o método do controlador
-        ResponseEntity<String> response = driverController.register(existingDriver);
+        ResponseEntity<String> response = driverController.signup(existingDriver);
 
         // Verificações
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -75,7 +75,7 @@ public class AuthControllerTest {
         doThrow(new RuntimeException("Database error")).when(driverService).saveDriver(any(Driver.class));
 
         // Chamando o método do controlador
-        ResponseEntity<String> response = driverController.register(newDriver);
+        ResponseEntity<String> response = driverController.signup(newDriver);
 
         // Verificações
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -86,7 +86,7 @@ public class AuthControllerTest {
     void login_whenDriverIsNotRegistered_shouldReturnErrorMessage() {
         Driver newDriver = new Driver();
         newDriver.setEmail("email@example.com");
-        newDriver.setNome("Test User");
+        newDriver.setUsername("Test User");
         newDriver.setCpf("123456789");
         newDriver.setPassword("password");
         when(driverService.checkIfExists(newDriver.getEmail())).thenReturn(false);
@@ -98,7 +98,7 @@ public class AuthControllerTest {
     void login_whenDriverAlreadyExists_shouldReturnErrorMessage() {
         Driver newDriver = new Driver();
         newDriver.setEmail("email@example.com");
-        newDriver.setNome("Test User");
+        newDriver.setUsername("Test User");
         newDriver.setCpf("123456789");
         newDriver.setPassword("password");
         when(driverService.checkIfExists(newDriver.getEmail())).thenReturn(true);
@@ -110,7 +110,7 @@ public class AuthControllerTest {
     void login_whenExceptionOccurs_shouldReturnErrorMessage() {
         Driver newDriver = new Driver();
         newDriver.setEmail("email@example.com");
-        newDriver.setNome("Test User");
+        newDriver.setUsername("Test User");
         newDriver.setCpf("123456789");
         newDriver.setPassword("password");
         doThrow(new RuntimeException("Database error")).when(driverService).saveDriver(any(Driver.class));
@@ -122,7 +122,7 @@ public class AuthControllerTest {
     void login_successful() {
         Driver newDriver = new Driver();
         newDriver.setEmail("email@example.com");
-        newDriver.setNome("Test User");
+        newDriver.setUsername("Test User");
         newDriver.setCpf("123456789");
         newDriver.setPassword("password");
         when(driverService.checkIfExists(newDriver.getEmail())).thenReturn(true);

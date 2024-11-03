@@ -7,6 +7,7 @@ import logdrive.model.Driver;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // classe responsável pela lógica de negócio das ações do relacionadas ao condutor (ex: cadastro, login...)
@@ -15,7 +16,7 @@ public class DriverService {
 
 //    @Autowired
 //    DriverRepository driverRepository;
-    List<Driver> drivers;
+    List<Driver> drivers = new ArrayList<>();
 
     // salva condutor no banco de dados
     public void saveDriver(SignupDTO signupDTO) {

@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
+//@CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
+@RequestMapping("auth")
 public class AuthController {
 
     @Autowired
@@ -41,7 +42,7 @@ public class AuthController {
             if (driverService.authenticate(loginRequest.email(), loginRequest.password())) {
                 return ResponseEntity.ok("Login bem-sucedido");
             }
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erro no login");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais Inválidas");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao login: " + e.getMessage());
         }

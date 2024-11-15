@@ -1,26 +1,35 @@
 package logdrive.model;
 
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.GeneratedValue;
-//import jakarta.persistence.GenerationType;
-//import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-//@Entity
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Maintenance implements ChargedService {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private double oleoKm;
     private double pneuKm;
-    private Date dataAbastecimento;
-    private Date dataCalibracao;
-    private Date dataBateria;
-    private Date dataFiltro;
-    private Date dataFreio;
     private double valor;
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
+    @Temporal(TemporalType.DATE)
+    private Date dataAbastecimento;
+    @Temporal(TemporalType.DATE)
+    private Date dataCalibracao;
+    @Temporal(TemporalType.DATE)
+    private Date dataBateria;
+    @Temporal(TemporalType.DATE)
+    private Date dataFiltro;
+    @Temporal(TemporalType.DATE)
+    private Date dataFreio;
 
     @Override
     public void cobrar(double valor) {

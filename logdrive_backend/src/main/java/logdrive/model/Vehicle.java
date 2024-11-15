@@ -10,27 +10,26 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Vehicle {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
-    private String placa;
-    private String chassi;
-    private int anoFabricacao;
-    private int anoModelo;
-    private String cor;
-    private String marca;
-    private String modelo;
-    private double kmRodados;
+    private String plate;
+    private String chassis;
+    private int year;
+    private String color;
+    private String maker;
+    private String model;
+    private double km;
     @ManyToOne
     @JoinColumn(name = "driver_id")
     private Driver driver;
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> listaMultas;
+    private List<Ticket> tickets;
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Travel> listaViagem;
+    private List<Travel> travels;
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Maintenance> listaManutencoes;
-
+    private List<Maintenance> maintenances;
 
 }

@@ -25,13 +25,13 @@ public class Driver {
     private String cpf;
     private String password;
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Vehicle> listaVeiculos;
+    private List<Vehicle> vehicles;
 
    public Driver(SignupDTO signupDTO) {
        this.email = signupDTO.email();
        this.username = signupDTO.username();
        this.cpf = signupDTO.cpf();
        this.password = new BCryptPasswordEncoder().encode(signupDTO.password());
-       this.listaVeiculos = new ArrayList<>();
+       this.vehicles = new ArrayList<>();
    }
 }

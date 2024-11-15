@@ -9,30 +9,26 @@ import java.util.Date;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Maintenance implements ChargedService {
+public class Maintenance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private double oleoKm;
-    private double pneuKm;
-    private double valor;
+    private double oilKm; // oleoKm
+    private double tireKm; // pneuKm
+    private double price;
     @ManyToOne
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
     @Temporal(TemporalType.DATE)
-    private Date dataAbastecimento;
+    private Date fuelDate;
     @Temporal(TemporalType.DATE)
-    private Date dataCalibracao;
+    private Date calibrationDate;
     @Temporal(TemporalType.DATE)
-    private Date dataBateria;
+    private Date batteryDate;
     @Temporal(TemporalType.DATE)
-    private Date dataFiltro;
+    private Date filterDate;
     @Temporal(TemporalType.DATE)
-    private Date dataFreio;
+    private Date brakeDate;
 
-    @Override
-    public void cobrar(double valor) {
-        this.valor = valor;
-    }
 }

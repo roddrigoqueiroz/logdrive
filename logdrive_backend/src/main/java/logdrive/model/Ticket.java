@@ -14,12 +14,12 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private double valor;
-    private String descricao;
+    private double price;
+    private String description;
     @Enumerated(EnumType.STRING)
-    private TicketSeverity gravidade;
-    private Date data;
-    private int pontos;
+    private TicketSeverity severity;
+    private Date date;
+    private int pointLoss;
     @ManyToOne
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;

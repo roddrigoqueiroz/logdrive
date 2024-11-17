@@ -1,47 +1,39 @@
 package logdrive.service;
 
 import logdrive.dto.SignupDTO;
-//import logdrive.repository.DriverRepository;
-//import org.springframework.beans.factory.annotation.Autowired;
 import logdrive.model.Driver;
+import logdrive.repository.DriverRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 // classe responsável pela lógica de negócio das ações do relacionadas ao condutor (ex: cadastro, login...)
 @Service
 public class DriverService {
 
-//    @Autowired
-//    DriverRepository driverRepository;
-    List<Driver> drivers = new ArrayList<>();
+    DriverRepository driverRepository;
+
+    @Autowired
+    public DriverService(DriverRepository driverRepository) {
+        this.driverRepository = driverRepository;
+    }
 
     // salva condutor no banco de dados
     public void saveDriver(SignupDTO signupDTO) {
         // salva senha cifrada com Bcrypt
         Driver driver = new Driver(signupDTO);
-        drivers.add(driver);
-//        driverRepository.save(condutor); // salva condutor no banco de dados via JPA
+        driverRepository.save(driver); // salva condutor no banco de dados via JPA
     }
 
     // checa se usuário já está registrado através do email no parâmetro
     public Boolean checkIfExists(String email) {
-        for (Driver driver : drivers) {
-            if (driver.getEmail().equals(email)) {
-                return true;
-            }
-        }
-        return false;
-//        return driverRepository.findByEmail(email).isPresent();
+        return driverRepository.findByEmail(email).isPresent();
     }
 
     public Driver getDriverByEmail(String email) {
-        for (Driver driver : drivers) {
-            if (driver.getEmail().equals(email)) {
-                return driver;
-            }
+        if (driverRepository.findByEmail(email).isPresent()) {
+            return driverRepository.findByEmail(email).get();
         }
         return null;
     }

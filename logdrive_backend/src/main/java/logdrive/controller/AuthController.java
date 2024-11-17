@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("auth")
 public class AuthController {
 
-    @Autowired
     DriverService driverService;
+
+    @Autowired
+    public AuthController(DriverService driverService) {
+        this.driverService = driverService;
+    }
 
     // atende requisição POST, cadastrando usuário
     @PostMapping("/register")

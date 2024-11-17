@@ -2,6 +2,7 @@ package logdrive.controller;
 
 import jakarta.validation.Valid;
 import logdrive.dto.SignupDTO;
+import logdrive.model.Vehicle;
 import logdrive.dto.LoginDTO;
 import logdrive.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-//@CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @RequestMapping("auth")
 public class AuthController {
@@ -45,6 +45,16 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais Inválidas");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao login: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/driver/{email}/vehicle")
+    public ResponseEntity<String> addVehicleToDriver(@PathVariable String email, @Valid @RequestBody Vehicle vehicleDTO) {
+        try {
+            driverService.addVehicleToDriver(email, vehicleDTO);
+            return ResponseEntity.ok("Veículo adicionado com sucesso");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao adicionar veículo: " + e.getMessage());
         }
     }
 

@@ -19,31 +19,32 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable())
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // Configuração CORS
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // Sessão Stateless
-                .authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()  // Permite acesso público
-                                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()  // Permite acesso público
-                                .anyRequest().authenticated()
-                )
-//                .formLogin(form -> form.defaultSuccessUrl("/home", true))  // Exemplo de redirecionamento após login
-                .build();
+        http
+            .cors().and().csrf().disable()
+            .authorizeRequests()
+            .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+            .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+            .requestMatchers(HttpMethod.POST, "/auth/driver/**/vehicle").permitAll()
+            .requestMatchers("/h2-console/**").permitAll() // Permitir acesso ao console do H2
+            .anyRequest().authenticated()
+            .and()
+            .headers().frameOptions().sameOrigin() // Permitir que o H2 console seja carregado em um frame
+            .and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*")); // Permite todas as origens; substitua por uma específica em produção
+        configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(false);
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }

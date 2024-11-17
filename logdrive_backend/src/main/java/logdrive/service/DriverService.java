@@ -1,9 +1,11 @@
 package logdrive.service;
 
 import logdrive.dto.SignupDTO;
-//import logdrive.repository.DriverRepository;
-//import org.springframework.beans.factory.annotation.Autowired;
+import logdrive.repository.DriverRepository;
 import logdrive.model.Driver;
+import logdrive.model.Vehicle;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,44 +16,22 @@ import java.util.List;
 @Service
 public class DriverService {
 
-//    @Autowired
-//    DriverRepository driverRepository;
-    List<Driver> drivers = new ArrayList<>();
+    @Autowired
+    DriverRepository driverRepository;
 
     // salva condutor no banco de dados
     public void saveDriver(SignupDTO signupDTO) {
-        // salva senha cifrada com Bcrypt
         Driver driver = new Driver(signupDTO);
-        drivers.add(driver);
-//        driverRepository.save(condutor); // salva condutor no banco de dados via JPA
+        driverRepository.save(driver); // salva condutor no banco de dados via JPA
     }
 
     // checa se usuário já está registrado através do email no parâmetro
     public Boolean checkIfExists(String email) {
-        for (Driver driver : drivers) {
-            if (driver.getEmail().equals(email)) {
-                return true;
-            }
-        }
-        return false;
-//        return driverRepository.findByEmail(email).isPresent();
+        return driverRepository.findByEmail(email).isPresent();
     }
 
-    public Driver getDriverByEmail(String email) {
-        for (Driver driver : drivers) {
-            if (driver.getEmail().equals(email)) {
-                return driver;
-            }
-        }
-        return null;
-    }
 
     public boolean authenticate(String email, String password) {
-
-        // verifica se dados de entrada são válidos (não nulos e não vazios)
-//        checkInputData(email);
-//        checkInputData(password);
-
         // busca condutor atraves do email
         Driver driver = getDriverByEmail(email);
 
@@ -67,6 +47,21 @@ public class DriverService {
         // Validação de dados de entrada
         if (input == null || input.isEmpty()) {
             throw new IllegalArgumentException("Dados inválidos ou vazios");
+        }
+    }
+
+    public Driver getDriverByEmail(String email) {
+        return driverRepository.findByEmail(email).orElse(null);
+    }
+
+    public void addVehicleToDriver(String email, Vehicle vehicle) {
+        Driver driver = getDriverByEmail(email);
+        if (driver != null) {
+            vehicle.setDriver(driver);
+            driver.getVehicles().add(vehicle);
+            driverRepository.save(driver);
+        } else {
+            throw new IllegalArgumentException("Driver not found");
         }
     }
 

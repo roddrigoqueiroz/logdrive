@@ -23,12 +23,11 @@ public class WebSecurityConfig {
                 .csrf(csrf -> csrf.disable())
 //                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // Configuração CORS
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // Sessão Stateless
                 .authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()  // Permite acesso público
-                                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()  // Permite acesso público
-//                        .requestMatchers(HttpMethod.POST, "/vehicle/register").permitAll()
-                                .anyRequest().authenticated()
+//                                .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()  // Permite acesso público
+//                                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()  // Permite acesso público
+////                        .requestMatchers(HttpMethod.POST, "/vehicle/register").permitAll()
+                                .anyRequest().permitAll()
                 )
 //                .formLogin(form -> form.defaultSuccessUrl("/home", true))  // Exemplo de redirecionamento após login
                 .build();

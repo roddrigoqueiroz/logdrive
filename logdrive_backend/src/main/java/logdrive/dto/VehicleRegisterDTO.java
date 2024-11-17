@@ -2,7 +2,6 @@ package logdrive.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import logdrive.model.Driver;
 
 public record VehicleRegisterDTO (
         @NotBlank(message = "Campo obrigatório")

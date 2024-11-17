@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 // classe responsável pela lógica de negócio das ações do relacionadas ao condutor (ex: cadastro, login...)
 @Service
 public class DriverService {

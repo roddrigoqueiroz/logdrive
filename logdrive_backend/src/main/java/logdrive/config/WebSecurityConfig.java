@@ -27,6 +27,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()  // Permite acesso público
                                 .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()  // Permite acesso público
+//                        .requestMatchers(HttpMethod.POST, "/vehicle/register").permitAll()
                                 .anyRequest().authenticated()
                 )
 //                .formLogin(form -> form.defaultSuccessUrl("/home", true))  // Exemplo de redirecionamento após login

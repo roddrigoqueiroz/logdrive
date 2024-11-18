@@ -19,10 +19,15 @@ public class DriverService {
     }
 
     // salva condutor no banco de dados
-    public void saveDriver(SignupDTO signupDTO) {
-        // salva senha cifrada com Bcrypt
-        Driver driver = new Driver(signupDTO);
-        driverRepository.save(driver); // salva condutor no banco de dados via JPA
+    public Driver saveDriver(SignupDTO signupDTO) throws Exception {
+        try {
+            // salva senha cifrada com Bcrypt
+            Driver driver = new Driver(signupDTO);
+            driverRepository.save(driver); // salva condutor no banco de dados via JPA
+            return driver;
+        } catch (Exception e) {
+            throw new Exception("Falha inesperada");
+        }
     }
 
     // checa se usuário já está registrado através do email no parâmetro
@@ -37,7 +42,7 @@ public class DriverService {
         return null;
     }
 
-    public boolean authenticate(String email, String password) {
+    public Long authenticate(String email, String password) {
 
         // verifica se dados de entrada são válidos (não nulos e não vazios)
 //        checkInputData(email);
@@ -51,7 +56,7 @@ public class DriverService {
             throw new IllegalArgumentException("Email não encontrado na base de dados");
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        return encoder.matches(password, driver.getPassword());
+        return encoder.matches(password, driver.getPassword()) ? driver.getId() : null;
     }
 
     public void checkInputData(String input) {

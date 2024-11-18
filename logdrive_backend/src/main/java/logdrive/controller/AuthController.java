@@ -1,6 +1,7 @@
 package logdrive.controller;
 
 import jakarta.validation.Valid;
+import logdrive.dto.ResponseDTO;
 import logdrive.dto.SignupDTO;
 import logdrive.dto.LoginDTO;
 import logdrive.service.DriverService;
@@ -15,16 +16,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("auth")
 public class AuthController {
 
-    DriverService driverService;
-
     @Autowired
-    public AuthController(DriverService driverService) {
-        this.driverService = driverService;
-    }
+    DriverService driverService;
 
     // atende requisição POST, cadastrando usuário
     @PostMapping("/register")
-    public ResponseEntity<String> signup(@Valid @RequestBody SignupDTO signupDTO) {
+    public ResponseEntity<ResponseDTO<?>> signup(@Valid @RequestBody SignupDTO signupDTO) {
         try {
             // Checa se já há conta registrada com o email recebido
             if (driverService.checkIfExists(signupDTO.email())) {
@@ -32,23 +29,24 @@ public class AuthController {
             }
             // Salva o novo condutor diretamente a partir do DTO recebido
             driverService.saveDriver(signupDTO);
-            return ResponseEntity.ok("Usuário cadastrado com sucesso");
+            return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário cadastrado com sucesso", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Erro ao cadastrar usuário: " + e.getMessage());
+                    .body(new ResponseDTO<>(false, e.getMessage(), null));
         }
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginDTO loginRequest) {
+    public ResponseEntity<ResponseDTO<?>> login(@Valid @RequestBody LoginDTO loginRequest) {
         try {
-            if (driverService.authenticate(loginRequest.email(), loginRequest.password())) {
-                return ResponseEntity.ok("Login bem-sucedido");
+            Long userId = driverService.authenticate(loginRequest.email(), loginRequest.password());
+            if (userId != null) {
+                return ResponseEntity.ok(new ResponseDTO<>(true, "Login efetuado com sucesso", userId));
             }
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais Inválidas");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseDTO<>(false, "Credenciais Inválidas", null));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao login: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO<>(false, e.getMessage(), null));
         }
     }
 

@@ -8,11 +8,10 @@ public record VehicleRegisterDTO (
         String plate,
         @NotNull
         Long driverId,
-//        private String chassis;
+        String chassis,
         int year,
         String color,
-//        private String maker;
+        String maker,
         String model,
-        String maker
-//        private double km;
+        double km
 ) {}

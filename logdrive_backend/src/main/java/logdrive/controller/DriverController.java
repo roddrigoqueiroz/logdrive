@@ -27,6 +27,9 @@ public class DriverController {
     public ResponseEntity<ResponseDTO<Driver>> getDriverById(@PathVariable Long id) {
         try {
             Driver driver = driverService.getDriverById(id);
+            if (driver == null) {
+                throw new IllegalStateException("Condutor não encontrado");
+            }
             return ResponseEntity.ok(new ResponseDTO<>(true, "Condutor encontrado", driver));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO<>(false, e.getMessage(), null));

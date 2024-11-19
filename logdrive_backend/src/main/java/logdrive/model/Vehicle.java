@@ -3,12 +3,14 @@ package logdrive.model;
 import jakarta.persistence.*;
 import logdrive.dto.VehicleRegisterDTO;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Vehicle {

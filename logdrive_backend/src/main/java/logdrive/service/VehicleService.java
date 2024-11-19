@@ -9,6 +9,10 @@ import logdrive.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class VehicleService {
 
@@ -29,6 +33,19 @@ public class VehicleService {
         // encontrou, então cria veiculo a partir do DTO
         Vehicle vehicle = new Vehicle(vehicleRegisterDTO, driver);
         vehicleRepository.save(vehicle); // salva veiculo no banco de dados via JPA
+    }
+
+    public List<Vehicle> getVehicleListByDriverId(Long driverId) {
+        return vehicleRepository.findAllByDriverId(driverId);
+    }
+
+    public List<VehicleRegisterDTO> getAllByDriverId(Long driverId) throws IllegalStateException {
+        List<Vehicle> vehicles = getVehicleListByDriverId(driverId); // busca veiculos do condutor
+        // empacota veiculos encontrados em DTOs
+        if (vehicles.isEmpty()) {
+            throw new IllegalStateException("Veículos não encontrados");
+        }
+        return vehicles.stream().map(VehicleRegisterDTO::new).collect(Collectors.toList());
     }
 
 }

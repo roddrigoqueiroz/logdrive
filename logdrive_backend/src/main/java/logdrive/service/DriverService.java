@@ -42,6 +42,13 @@ public class DriverService {
         return null;
     }
 
+    public Driver getDriverById(Long id) {
+        if (driverRepository.findById(id).isPresent()) {
+            return driverRepository.findById(id).get();
+        }
+        return null;
+    }
+
     public Long authenticate(String email, String password) {
 
         // verifica se dados de entrada são válidos (não nulos e não vazios)
